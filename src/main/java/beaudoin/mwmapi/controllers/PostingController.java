@@ -29,7 +29,6 @@ public class PostingController {
 
     @PostMapping("/post-posting")
     public ResponseEntity<Integer> addPosting(@RequestBody PostingDAO posting) {
-        System.out.println(posting.toString());
         Posting newPosting = new Posting(posting.getPostTitle(), posting.getPostBody());
 
         postingService.addPosting(newPosting);
@@ -47,6 +46,7 @@ public class PostingController {
 
     @GetMapping("postings/{id}")
     public ResponseEntity<Posting> getPostingById(@PathVariable Integer id) {
+        System.out.println("id is: " + id);
         Posting posting = postingService.findPostingById(id);
         if(posting.getPostTitle() != null) {
             return new ResponseEntity<>(posting, HttpStatus.OK);
