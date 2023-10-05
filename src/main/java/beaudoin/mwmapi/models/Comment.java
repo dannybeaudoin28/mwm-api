@@ -6,24 +6,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "COMMENT_TABLE")
 public class Comment {
-    public Comment() {
-
-    }
-
-    public Comment(String body, Integer authorId) {
-        this.body = body;
-        this.authorId = authorId;
-        this.commentDate = new Date();
-        this.commentIsRemoved = false;
-        this.commentRemovedDate = null;
-    }
+    public Comment() {}
 
     @Id
     @GeneratedValue
@@ -45,16 +33,12 @@ public class Comment {
     @Column(name = "COMMENT_REMOVED_DT")
     private Date commentRemovedDate;
 
-    @ManyToOne
-    @JoinColumn(name = "POSTING_ID")
-    private Posting posting;
-
-    public Posting getPosting() {
-        return posting;
+    public Integer getId() {
+        return id;
     }
 
-    public void setPosting(Posting posting) {
-        this.posting = posting;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getBody() {
@@ -95,9 +79,5 @@ public class Comment {
 
     public void setCommentRemovedDate(Date commentRemovedDate) {
         this.commentRemovedDate = commentRemovedDate;
-    }
-
-    public Integer getId() {
-        return id;
-    }
+    }    
 }

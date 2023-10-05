@@ -19,7 +19,7 @@ import beaudoin.mwmapi.services.PostingService;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api")
+@RequestMapping("/comments")
 public class CommentController {
 
     private CommentService commentService;
@@ -32,13 +32,10 @@ public class CommentController {
 
     @PostMapping("/post-comment/{postingId}")
     public ResponseEntity<Integer> addComment(@RequestBody Comment comment, @PathVariable Integer postingId) {
-        Comment newComment = new Comment(comment.getBody(), 1);
         Posting posting = postingService.findPostingById(postingId);
-        List<Comment> comments = new ArrayList<>();
-        comments.add(newComment);
-        posting.setComments(comments);
+        posting.getComments().add(comment);
+        commentService.save(comment);
         
-        postingService.save(posting);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

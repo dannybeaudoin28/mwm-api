@@ -17,4 +17,7 @@ public class CommentService {
         commentRepository.save(newComment);
     }
     
+    public Comment findCommentByPostingId(Integer id) {
+        return commentRepository.findById(id).get();
+    }
 }

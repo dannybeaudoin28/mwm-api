@@ -1,10 +1,15 @@
 package beaudoin.mwmapi.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -14,10 +19,8 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "POSTING_TABLE")
 public class Posting {
-    
 
-    public Posting() {
-    }
+    public Posting() {}
 
     public Posting(Integer id, String postTitle, String postBody, Date postDate, boolean isRemoved,
             Date postRemovedDate) {
@@ -27,6 +30,7 @@ public class Posting {
         this.postDate = postDate;
         this.isRemoved = isRemoved;
         this.postRemovedDate = postRemovedDate;
+        this.comments = new ArrayList<>();
     }
 
     public Posting(String postingTitle, String postingBody) {
@@ -36,7 +40,8 @@ public class Posting {
         this.postDate = new Date();
         this.isRemoved = false;
         this.postRemovedDate = null;
-    }   
+        this.comments = new ArrayList<>();
+    }
 
     @Id
     @GeneratedValue
@@ -58,31 +63,32 @@ public class Posting {
     @Column(name = "POSTING_REMOVED_DT")
     private Date postRemovedDate;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "POSTING_ID")
     private List<Comment> comments;
 
-    public List<Comment> getComments() {
-        return comments;
+    public Integer getId() {
+        return id;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getPostTitle() {
         return postTitle;
     }
 
-    public void setPostTitle(String title) {
-        this.postTitle = title;
+    public void setPostTitle(String postTitle) {
+        this.postTitle = postTitle;
     }
 
     public String getPostBody() {
         return postBody;
     }
 
-    public void setPostBody(String body) {
-        this.postBody = body;
+    public void setPostBody(String postBody) {
+        this.postBody = postBody;
     }
 
     public Date getPostDate() {
@@ -109,7 +115,13 @@ public class Posting {
         this.postRemovedDate = postRemovedDate;
     }
 
-    public Integer getId() {
-        return id;
-    } 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    
 }

@@ -2,6 +2,7 @@ package beaudoin.mwmapi.controllers;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,14 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import beaudoin.mwmapi.dao.PostingDAO;
 import beaudoin.mwmapi.models.Posting;
+import beaudoin.mwmapi.services.CommentService;
 import beaudoin.mwmapi.services.PostingService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/postings")
 public class PostingController {
     //TODO: add put method as well for updating a post.
     private PostingService postingService;
+
+    @Autowired
+    private CommentService commentService;
 
     public PostingController(PostingService postingService) {
         this.postingService = postingService;
@@ -38,7 +43,7 @@ public class PostingController {
 
     @GetMapping("/all-postings")
     public ResponseEntity<List<Posting>> getAllPostings() {
-        List postings = postingService.findAllPostings();
+        List<Posting> postings = postingService.findAllPostings();
         if(postings.size() > 0)
             return new ResponseEntity<List<Posting>>(postings, HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -48,6 +53,7 @@ public class PostingController {
     public ResponseEntity<Posting> getPostingById(@PathVariable Integer id) {
         System.out.println("id is: " + id);
         Posting posting = postingService.findPostingById(id);
+        //posting.setComments(commentService.findCommentByPostingId(id));
         if(posting.getPostTitle() != null) {
             return new ResponseEntity<>(posting, HttpStatus.OK);
         }
