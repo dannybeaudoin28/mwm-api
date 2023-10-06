@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,9 +55,24 @@ public class PostingController {
     public ResponseEntity<Posting> getPostingById(@PathVariable Integer id) {
         System.out.println("id is: " + id);
         Posting posting = postingService.findPostingById(id);
-        //posting.setComments(commentService.findCommentByPostingId(id));
         if(posting.getPostTitle() != null) {
             return new ResponseEntity<>(posting, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("postings/{id}")
+    public ResponseEntity<Integer> deletePostingById(@PathVariable Integer id) {
+        if(postingService.deletePosting(id)) {
+            return new ResponseEntity<Integer>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/postings/{id}") 
+    public ResponseEntity<Void> updatePostingById(@PathVariable Integer id, @RequestBody Posting newPosting) {
+        if(postingService.updatePosting(newPosting, id) != null) {
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

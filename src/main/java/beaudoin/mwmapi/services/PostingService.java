@@ -1,5 +1,6 @@
 package beaudoin.mwmapi.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +36,28 @@ public class PostingService {
 
     public void save(Posting posting) {
         postingRepo.save(posting);
+    }
+
+    public boolean deletePosting(Integer id) {
+        if(!postingRepo.findById(id).isEmpty()) {
+            postingRepo.deleteById(id);
+
+            return true;
+        }
+        return false;
+    }
+
+    public Posting updatePosting(Posting newPosting, Integer id) {
+        Posting oldPosting = postingRepo.findById(id).get();
+        if(oldPosting != null) {
+            oldPosting.setPostBody(newPosting.getPostBody());
+            oldPosting.setPostTitle(newPosting.getPostTitle());
+            oldPosting.setPostDate(new Date());
+
+            postingRepo.save(oldPosting);
+            return oldPosting;
+        }
+        return null;
     }
     
 }

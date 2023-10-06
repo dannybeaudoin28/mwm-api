@@ -35,7 +35,7 @@ public class CommentController {
         Posting posting = postingService.findPostingById(postingId);
         posting.getComments().add(comment);
         commentService.save(comment);
-        
+    
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

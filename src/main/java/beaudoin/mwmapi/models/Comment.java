@@ -11,7 +11,9 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "COMMENT_TABLE")
 public class Comment {
-    public Comment() {}
+    public Comment() {
+        this.commentDate = new Date();
+    }
 
     @Id
     @GeneratedValue
